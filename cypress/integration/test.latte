@@ -1,0 +1,19 @@
+{foreach $components as $component}
+function {$component['component']}(selector = '') {
+	const newSelector = selector + ' .{$component['component']}';
+	cy.get(newSelector).should('have.length', 1).and('be.visible'){if
+	$component['action']}.{$component['action']}({if
+	$component['value']}"{$component['value']}"{/if}){/if}
+{foreach $component['subComponents'] as $subcomponent}
+	{$subcomponent}(newSelector);
+{/foreach}
+}
+
+{/foreach}
+
+describe('{$title}', () => {
+	it('should {$title}', () => {
+		cy.visit('http://localhost:9600');
+		{$start['component']}();
+	})
+})
